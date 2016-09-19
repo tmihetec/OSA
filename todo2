@@ -1,0 +1,187 @@
+
+
+****************
+????????????????
+****************
+
+U SVE IZVJEŠTAJE DODATI "TIP UREĐAJA"
+U XLS (view) ISTO, AL SAD i kompletni (2015)
+
+
+kod spremanja statusa, ako je nalog trenutno u KC, onda serviseri iz ZG nemaju kaj spremati (i obrnuto)!
+brisanje STATUSA (iz povijesti)
+
+****************
+????????????????
+****************
+
+
+KOD STATUSA....
+ONO, KOJI IDE... 
+NE MOŽE IĆI OVER ili REJECTED ako nije prije toga bio:
+		- status_service
+		- status_waitpart
+		- status_waitresponse
+
+
+
+1# DASHBOARD
+
+1) OTVORENI NALOZI
+
+	- ukupno otvorenih naloga: svi, t2, h18, vacom, ostali
+	- graf1) otvoren dana (do 7, do 14, do 21, 22+)
+	- graf2) komitent (tele2, hangar18, vacom, ostali)
+
+	prema gore, 2 boje
+
+
+2# ANALITIKA SERVISERA
+
+0) svi, onda = završeni servisi
+
+1) graf: (y)=broj završenih servisa (x)=tjedni
+
+	linije za svaki level
+
+
+
+HR1000011465
+355656558638326
+
+	------------
+
+
+= ROLES, ABILITIES, ROLE-ABILITIES, USER-ABILITIES, USER_ROLES
+
+#https://github.com/JosephSilber/bouncer
+
+
+** brisanje: komitent, tip, services, sparepart, sparepart load js object, 
+** setupcontroller??
+
+
+
+
+vidjeti kaj s tim ENV varijablama koje nisam imao do sada...
+
+
+
+10min:
+1)
+DA- pročistiti bazu, staviti sve na 000000000000000 di treba
+DA- backup remote baze
+
+DA- upload novih fajlova 
+
+DA- izmjena u bazi
+DA- DROP VIEW `iznosnaloga`, `naplativiiznosi`, `reportsother`, `reportsother45d`, `reportsother_45d`, `zs`;
+DA-  napriviti nove! (pokrenuti /slucaj)
+DA- test
+
+
+
+2a) DA- dodati bouncer polja (zabouncer.sql) na remote bazu
+
+
+2) 
+DA- backup fajlova, local
+DA- prebaciti na staru bazu
+DA- test local
+
+da_ upload + ENV!!
+DA- test remote
+
+
+
+OSTALO::: :_----------------------------------
+
+## u log staviti i promjene ROLA! + dodavanje novih usera.,..
+
+update na 5.3
+test local
+
+3) paralelni rad na istoj bazi
+
+prebacivanje na novo
+
+OSTALO END::: :_----------------------------------
+
+
+
+
+3a) TEST SA T2
+	
+	-prebacio 19.05.2016, 11:40
+
+
+
+
+
+4) prebaciti na novu verzuiju
+
+===============================
+
+
+
+kod uploada još uvijek stare verzije:
+
+D:\proj\web\STS\sts\app\Http\Controllers\Auth\AuthController.php:
+D:\proj\web\STS\sts\app\Http\Controllers\ModalController.php:
+D:\proj\web\STS\sts\app\Http\Controllers\RepairorderController.php:
+D:\proj\web\STS\sts\app\Http\Controllers\ReportController.php:
+D:\proj\web\STS\sts\app\Models\Repairorder.php:
+D:\proj\web\STS\sts\app\Models\Repairstatus.php:
+D:\proj\web\STS\sts\app\Models\User.php:
+D:\proj\web\STS\sts\app\Providers\AppServiceProvider.php:
+locplacescontroller
+
+
+D:\proj\web\STS\sts\config\entrust.php:
+D:\proj\web\STS\sts\database\migrations\2015_08_17_051132_entrust_setup_tables.php:
+
+
+to je izmjenjeno!!!!
+
+
+
+
+sqls:
+
+dodati ability i ostale Bouncer kojih tu nema... (zabouncer.sql)
+abbilities, role_abbilities, user_abbilities
+?za početak ne, ali poslije testiranja da: DROP apppermisions, apppersmisions_approles
+
+
+
+compatibility:
+RENAME TABLE apppermissions TO permissions;
+RENAME TABLE apppermission_approle TO permission_role;
+
+new version:
+RENAME TABLE appusers TO users;
+RENAME TABLE approles TO roles;
+RENAME TABLE approle_appuser TO user_roles;
+
+izmjene u modelima:
+ALTER TABLE repairorder_repairstatus DROP FOREIGN KEY repairorder_repairstatus_ibfk_3;
+ALTER TABLE `repairorder_repairstatus` CHANGE `appuser_id` `user_id` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `repairorder_repairstatus` ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+
+nakon testiranja da li sve radi na staroj verziji,
+uploadati novu
+testirati novu, ali sa istom bazom
+prebaciti na novu verziju
+
+
+izbrisati (DROP) permissions, permission_role jel to Bouncer ne koristi!
+
+
+
+--------------------------
+
+
+#1 Admin mora moći izbrisati i "OTPREMLJENO IZ SERVISA" (zatvoreni) nalog!
+#2 Ako je nalog bio "otpremljeni iz servisa" (zatvoren), nakon ajax promjene na npr. "zaprimljen u servisu" treba maknuti onaj alert div dole da je nalog zatvoren

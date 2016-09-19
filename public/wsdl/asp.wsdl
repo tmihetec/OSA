@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="service" targetNamespace="http://www.aduro.hr/ASP/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.aduro.hr/ASP/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.aduro.hr/ASP/">
+      <xsd:complexType name="Status">
+        <xsd:sequence>
+          <xsd:element name="errorCode" type="xsd:int"/>
+          <xsd:element name="message" type="xsd:string" nillable="true"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Device">
+        <xsd:sequence>
+          <xsd:element name="imei" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+          <xsd:element name="reason" type="xsd:string" maxOccurs="1" minOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>reason for providing this IMEI (list of reasons to be defined)</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="serviceStatus">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="IRR">
+            <xsd:annotation>
+              <xsd:documentation>Irrepairable</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="NFF">
+            <xsd:annotation>
+              <xsd:documentation>No Fault Found</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="NOR">
+            <xsd:annotation>
+              <xsd:documentation>Not Repaired</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="PPR">
+            <xsd:annotation>
+              <xsd:documentation>Pending - parts received</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="QCF">
+            <xsd:annotation>
+              <xsd:documentation>QC Fail</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="QCP">
+            <xsd:annotation>
+              <xsd:documentation>QC Pass</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="QCS">
+            <xsd:annotation>
+              <xsd:documentation>QC Standby</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="QCW">
+            <xsd:annotation>
+              <xsd:documentation>QC Waiting For Feedback</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="REP">
+            <xsd:annotation>
+              <xsd:documentation>Repaired</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="SOL">
+            <xsd:annotation>
+              <xsd:documentation>Awaiting solution</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="SPR">
+            <xsd:annotation>
+              <xsd:documentation>Awaiting spare part</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="SWA">
+            <xsd:annotation>
+              <xsd:documentation>Swapped Device</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="SWP">
+            <xsd:annotation>
+              <xsd:documentation>Awaiting swap unit</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="serviceType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="SW">
+            <xsd:annotation>
+              <xsd:documentation>softwareski popravak</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="HW-LCD">
+            <xsd:annotation>
+              <xsd:documentation>zamjenjen lcd</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="HW-MB">
+            <xsd:annotation>
+              <xsd:documentation>zamjena matične ploče</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="LIQ-DAM">
+            <xsd:annotation>
+              <xsd:documentation>nije popravljen zbog vlage</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="MEH-DAM">
+            <xsd:annotation>
+              <xsd:documentation>nije popravljen zbog mehaničkog ostećenja</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="ROOT">
+            <xsd:annotation>
+              <xsd:documentation>nije popravljen zbog root-anja telefona</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="HW-OTHER">
+            <xsd:annotation>
+              <xsd:documentation>hardwareski popravak</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="Service">
+        <xsd:sequence>
+          <xsd:element name="status" type="tns:serviceStatus" maxOccurs="1" minOccurs="0" nillable="true"/>
+          <xsd:element name="type" type="tns:serviceType" maxOccurs="1" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="repairStatus">
+        <xsd:restriction base="xsd:int">
+          <xsd:enumeration value="101">
+            <xsd:annotation>
+              <xsd:documentation>Zaprimljeno</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="102">
+            <xsd:annotation>
+              <xsd:documentation>Na čekanju</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="103">
+            <xsd:annotation>
+              <xsd:documentation>Završeno</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="104">
+            <xsd:annotation>
+              <xsd:documentation>Otpremljeno iz servisnog centra</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:element name="ChangeDeviceRepairStatusRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="caseId" type="xsd:string" maxOccurs="1" minOccurs="1"/>
+            <xsd:element name="status" type="tns:repairStatus" maxOccurs="1" minOccurs="1"/>
+            <xsd:element name="remark" type="xsd:string" maxOccurs="1" minOccurs="0" nillable="true"/>
+            <xsd:element name="comment" type="xsd:string" maxOccurs="1" minOccurs="0" nillable="true"/>
+            <xsd:element name="device" type="tns:Device" maxOccurs="1" minOccurs="0" nillable="true"/>
+            <xsd:element name="service" type="tns:Service" maxOccurs="1" minOccurs="0" nillable="true"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ChangeDeviceRepairStatusResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="status" type="tns:Status" maxOccurs="1" minOccurs="1"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ChangeDeviceRepairStatusRequest">
+    <wsdl:part element="tns:ChangeDeviceRepairStatusRequest" name="params"/>
+  </wsdl:message>
+  <wsdl:message name="ChangeDeviceRepairStatusResponse">
+    <wsdl:part element="tns:ChangeDeviceRepairStatusResponse" name="params"/>
+  </wsdl:message>
+  <wsdl:portType name="ASP">
+    <wsdl:operation name="ChangeDeviceRepairStatus">
+      <wsdl:documentation>Changes service status of device paired with specific caseId</wsdl:documentation>
+      <wsdl:input message="tns:ChangeDeviceRepairStatusRequest"/>
+      <wsdl:output message="tns:ChangeDeviceRepairStatusResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ASPSoapService" type="tns:ASP">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ChangeDeviceRepairStatus">
+      <soap:operation soapAction="http://www.aduro.hr/ASP/ChangeDeviceRepairStatus"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ASP">
+    <wsdl:port binding="tns:ASPSoapService" name="ASPSoapService">
+      <soap:address location="http://ASP/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
